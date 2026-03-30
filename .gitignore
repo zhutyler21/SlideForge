@@ -1,0 +1,38 @@
+# Environment files
+.env
+*.env
+.env.local
+
+# Claude Code
+.claude/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+
+# Output directory
+output/
+
+# Projects (generated data, not tracked)
+projects/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Temporary files
+temp/
+*.tmp
+*.bak
+
+# Legacy generated images (if any remain in root)
+generated_images/
+generated_images_*/

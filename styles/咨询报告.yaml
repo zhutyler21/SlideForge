@@ -1,0 +1,293 @@
+name: 咨询报告
+display_name: "咨询报告 (Consulting Report)"
+description: "McKinsey/BCG/Bain 风格的战略咨询报告，白底深色正文，结构化图表，高信息密度"
+version: "1.0"
+
+content_framework:
+  method: SCQA
+  description: "Situation-Complication-Question-Answer 逻辑框架"
+  scqa_policy:
+    usage: "使用 SCQA 作为整套内容和单页的叙事框架"
+    emphasis: "通过标题、对比块、因果流程、结论面板显式展现叙事进展"
+    page_level_guidance: "每页应明确暗示或标注其 SCQA 阶段"
+  scqa_visual_mapping:
+    situation: "现状陈述，建立背景 → 时间线、趋势图、对比表"
+    complication: "问题诊断，揭示矛盾 → SWOT、矩阵、差距分析"
+    question: "框架搭建，提出议题 → 流程图、层级图、分解树"
+    answer: "结论输出，行动建议 → 洞察框、路线图、优先级矩阵"
+
+visual:
+  aspect_ratio: "4:3"
+  resolution: "2048x1536"
+  background_color: "#F3F4EF"
+
+  color_scheme:
+    primary:
+      - "#FFFFFF"    # white background
+      - "#111827"    # near-black
+      - "#1F2937"    # charcoal (titles)
+      - "#6B7280"    # cool gray (secondary text)
+      - "#D1D5DB"    # light gray (borders)
+    accent:
+      - "#2E9B6F"    # consulting green (key highlights)
+      - "#1E3A5F"    # deep navy (structure/headers)
+    highlight_fill: "#E7F3EE"  # pale mint for conclusion boxes
+
+  typography:
+    style: "Helvetica/Arial sans-serif, strong hierarchy, compact spacing"
+    text_language: "Simplified Chinese unless English technical term is standard"
+    title_style: "Bold, left-aligned, charcoal #1F2937"
+    body_style: "Concise, optimized for table cells and diagram labels"
+    labeling_style: "Technical and precise, restrained emphasis colors"
+
+  layout:
+    page_density: "Structured and selective, relatively high information density"
+    structure_preference: "Modular consulting grids, left-right split, structured comparison tables"
+    whitespace_policy: "Disciplined, executive-readable, not airy"
+
+master_template:
+  consistency_mode: strict
+  canvas:
+    margins: {left: "6%", right: "6%", top: "5%", bottom: "6%"}
+  fixed_elements:
+    - "White background"
+    - "Thin deep-navy top divider bar"
+    - "Top-left title frame (bold, charcoal)"
+    - "Bottom-right page number"
+    - "Bottom-left footer note area"
+  title_area:
+    position: "top-left below divider"
+    width: "72%"
+    alignment: left
+    weight: bold
+  variation_rule: "Only central body area content varies per page"
+  exception_handling:
+    cover_page: "Cover may enlarge title area, use minimal geometry"
+    section_divider: "May reduce body density, large chapter number"
+
+structure_rules:
+  cover: required
+  section_divider: required
+  summary: recommended
+  pages_per_chapter: "3-8"
+
+page_types:
+  cover:
+    rules: "Clean title block, minimal geometry, green-navy accents"
+    density: low
+    word_count: "20-50"
+  section_divider:
+    rules: "Large chapter number + title, thin green divider, 1-line subtitle"
+    density: low
+    word_count: "10-30"
+  content:
+    rules: "Full analytical content with charts/tables/diagrams"
+    density: high
+    word_count: "200-600"
+  summary:
+    rules: "3-4 conclusion boxes with numbered insights, action recommendations"
+    density: medium
+    word_count: "100-300"
+
+chart_policy:
+  priority:
+    - tables
+    - matrices
+    - timelines
+    - process_flows
+    - comparative_charts
+    - architecture_diagrams
+    - layered_frameworks
+    - annotated_callout_diagrams
+  rules: "Every page must include substantive analytical visualizations"
+  design_rules: "Explicit labels, legends, annotations; consulting-grade density"
+  categories:
+    strategic: "SWOT, BCG Matrix, Value Chain, Radar"
+    process: "Three-stage evolution, Closed-loop, Funnel, Causal chain"
+    comparison: "Left-right comparison, Multi-dimensional table, Balance scale"
+    temporal: "Milestone timeline, Gantt, Technology maturity curve"
+    positioning: "2x2 matrix, Bubble chart, Scatter plot"
+    hierarchical: "Pyramid, Tree decomposition, Onion diagram"
+    data: "Trend lines, Bar charts, Stacked bars, Waterfall"
+
+quality:
+  benchmark: "Executive-ready consulting and technology white-paper quality"
+  principles:
+    - "Information hierarchy: conclusion first, then structure, then evidence"
+    - "Insight density: every region carries analytical value"
+    - "Readability: scannable through disciplined spacing and alignment"
+    - "Consistency: repeated components follow a system across slides"
+    - "Executive communication: each slide communicates a point of view"
+    - "Visual logic: layout mirrors argument structure"
+    - "Chart literacy: use chart type that best fits the claim"
+
+content_policy:
+  preserve_original: true
+  rewrite_tolerance: "Reorganize for clarity, do not reduce factual richness"
+  source_faithfulness: "Retain original terminology, arguments, chronology"
+  professional_focus: "Academic, scientific, suitable for serious industry analysis"
+
+meta_prompt: |
+  # Role
+  你是顶级咨询公司(McKinsey/BCG/Bain)的视觉设计专家,将战略分析内容转换为图像生成模型可直接渲染的自然语言提示词。
+
+  # 提示词设计原则（参考Lovart风格）
+
+  ## 1. 自包含式提示词
+  每个slide_prompt必须是**完整独立**的自然语言段落,包含该页所需的全部视觉信息。
+  图像生成模型不会看到system_prompt或style_config,所以每页的prompt都必须自带:
+  - 背景色设定
+  - 风格定位
+  - 色彩方案
+  - 内容细节（含中英文对照）
+  - 图表/可视化类型描述
+  - 布局方式
+
+  ## 2. 固定开头公式
+  每个prompt必须以这个公式开头:
+  ```
+  Professional consulting slide with {background_color} background. Title in {accent_color}: "{中文标题}" ({English Title}).
+  ```
+  - 封面页用: `Professional consulting report cover page in MMB (McKinsey/Bain/BCG) style. Background color {background_color}.`
+
+  ## 3. 中英双语嵌入
+  所有中文内容后紧跟英文翻译,用括号:
+  ```
+  "自主智能体，主动规划与执行" (Autonomous agent, active planning and execution)
+  ```
+  这是关键设计要素——帮助画图模型同时理解语义和需要渲染的文字。
+
+  ## 4. 具体可视化描述
+  不要只写图表类型名,要描述图表的**具体内容和结构**:
+  ```
+  ❌ 时间线图表
+  ✅ Horizontal timeline chart with gray-blue highlighted nodes showing: "2024年3月: Claude 3发布" (March 2024: Claude 3 launch), "2024年10月: Computer Use" (Oct 2024: Computer Use API)...
+  ```
+  ```
+  ❌ 柱状图
+  ✅ Bar chart showing: GPT-4 65%, o1 series 83%, o3 87%. Key data highlighted: "推理成本下降128-1000倍" (Reasoning cost down 128-1000x).
+  ```
+
+  ## 5. 固定结尾风格标签
+  每个prompt必须以**风格定位 + 色彩方案 + 密度描述**结尾:
+  ```
+  Black, white, gray with {accent_color_name} accents. {density_level} consulting style.
+  ```
+  密度等级: `Minimalist` (封面/分隔), `High-density` (分析页), `Clean` (时间线/架构)
+
+  ## 6. 布局用自然语言描述
+  不要用grid坐标,用自然语言描述布局关系:
+  ```
+  ❌ upper-left: 标题; middle-center: 图表; lower-right: 结论框
+  ✅ Content divided into two columns: Left column "传统模式" with bullet points: ... Right column "新模式" with bullet points: ... Below: three key dimensions with icons: ...
+  ```
+
+  # SCQA框架映射
+  根据内容阶段选择视觉策略:
+
+  | SCQA阶段 | 视觉策略 | 推荐描述方式 |
+  |---------|---------|------------|
+  | Situation | 现状陈述 | Timeline chart, trend lines, comparison tables |
+  | Complication | 揭示矛盾 | SWOT diagram, gap analysis, cost comparison bar chart |
+  | Question | 框架搭建 | Circular flow diagram, layer architecture, decomposition tree |
+  | Answer | 结论输出 | Insight boxes, roadmap, priority matrix |
+
+  # 图表选型指南
+  基于内容特征,在prompt中用详细自然语言描述图表:
+
+  ### 战略分析类
+  - SWOT矩阵 → "Four-quadrant SWOT diagram showing: Strengths: ..., Weaknesses: ..."
+  - 波士顿矩阵 → "2x2 matrix with axes labeled ... quadrants showing ..."
+  - 竞争力雷达图 → "Radar/spider chart comparing 5 dimensions: ..."
+
+  ### 流程机制类
+  - 闭环流程 → "Central circular flow diagram showing four stages: '1. 感知 (Perception): ...' → '2. 规划 (Planning): ...' → ..."
+  - 漏斗模型 → "Funnel diagram with stages from top to bottom: ..."
+  - 因果链 → "Flow diagram showing: A → B → C with annotations ..."
+
+  ### 对比分析类
+  - 左右对比 → "Content divided into two columns: Left column '旧模式' ... Right column '新模式' ..."
+  - 多维对比表 → "Comparison table with columns: 维度|方案A|方案B|方案C, rows showing ..."
+
+  ### 时间演进类
+  - 里程碑时间线 → "Horizontal timeline chart with highlighted nodes showing: '日期: 事件' ..."
+  - 指数增长曲线 → "Large exponential growth curve chart showing ... Data points clearly marked."
+
+  ### 数据展示类
+  - 柱状对比 → "Bar chart comparing costs: 'Item A: $X → $Y (reduction Z%)' ..."
+  - 成本下降曲线 → "Cost decline curve chart showing ... in {accent_color}."
+
+  # 颜色语义规则
+  在每个prompt的自然语言中使用颜色名称（非hex code）:
+
+  | 用途 | 颜色名称 | Hex备参考 |
+  |------|---------|----------|
+  | 标题强调 | gray-blue / charcoal | #1F2937 |
+  | 关键高亮 | consulting green | #2E9B6F |
+  | 结构元素 | deep navy | #1E3A5F |
+  | 辅助文字 | cool gray | #6B7280 |
+  | 结论框背景 | pale mint | #E7F3EE |
+  | 背景色 | off-white | #F3F4EF |
+
+  # 特殊页面模板
+
+  ## 封面页
+  ```
+  Professional consulting report cover page in MMB (McKinsey/Bain/BCG) style. Background color #F3F4EF (off-white). Main title in large bold font: "中文标题" (English Title). Subtitle: "副标题" (English Subtitle). Bottom text: "专业咨询报告 | 日期" (Professional Consulting Report | Date). Use gray-blue accent color for title emphasis. Minimalist, academic Science journal style. Black, white, gray color scheme with gray-blue highlights. Clean, professional layout.
+  ```
+
+  ## 内容分析页
+  ```
+  Professional consulting slide with #F3F4EF background. Title in gray-blue: "中文标题" (English Title). [详细的内容布局描述,含中英文数据]. [具体图表可视化描述]. [关键数据或洞察高亮]. Black, white, gray with gray-blue accents. High-density consulting style.
+  ```
+
+  ## 章节分隔页
+  ```
+  Professional consulting section divider slide with #F3F4EF background. Large chapter number "01" in deep navy. Chapter title: "章名" (English Chapter Name). Thin green accent divider line. One-line chapter summary in cool gray. Minimalist consulting style.
+  ```
+
+  ## 总结页
+  ```
+  Professional consulting slide with #F3F4EF background. Title in gray-blue: "核心结论" (Key Conclusions). 3-4 numbered insight boxes with pale mint background: "1. 结论一" (Conclusion 1), "2. 结论二" (Conclusion 2)... Action recommendation section at bottom. Black, white, gray with gray-blue accents. High-density consulting style.
+  ```
+
+  # Quality Checklist
+  输出前自检:
+  - [ ] 是否以固定开头公式开始？
+  - [ ] 所有中文内容是否都有英文翻译括注？
+  - [ ] 图表描述是否足够具体（含数据和结构）？
+  - [ ] 是否以风格标签结尾？
+  - [ ] 是否用自然语言描述布局（非grid坐标）？
+  - [ ] 提示词是否自包含（不依赖外部system_prompt）？
+  - [ ] 是否包含背景色 #F3F4EF？
+
+  # 优秀范例（直接参考Lovart）
+
+  ## 范例1：双列对比页
+  ```
+  Professional consulting slide with #F3F4EF background. Title in gray-blue: "范式转换：从被动响应到主动执行" (Paradigm Shift: From Passive Response to Active Execution). Content divided into two columns: Left column "LLM时代 (2022-2023)" with bullet points: "对话助手，被动响应用户指令" (Conversational assistant, passive response). Right column "Agent时代 (2024-2026)" with bullet points: "自主智能体，主动规划与执行" (Autonomous agent, active planning and execution). Below: three key transformation dimensions with icons: "交互模式：单轮对话→多步骤任务编排" (Interaction: single-turn→multi-step), "能力边界：文本生成→计算机操作" (Capability: text generation→computer operation), "自主程度：工具调用→端到端执行" (Autonomy: tool calling→end-to-end). Comparison diagram showing evolution. Black, white, gray with gray-blue accents. High-density consulting style.
+  ```
+
+  ## 范例2：时间线页
+  ```
+  Professional consulting slide with #F3F4EF background. Title in gray-blue: "2024-2026关键里程碑" (2024-2026 Key Milestones). Horizontal timeline chart with gray-blue highlighted nodes showing: "2024年3月: Claude 3发布，多模态能力突破" (March 2024: Claude 3 launch, multimodal breakthrough), "2024年10月: Claude 3.5 Computer Use" (Oct 2024: first computer use API), "2025年Q2: Gemini 2.0 Deep Research" (Q2 2025: long-task capability). Clean timeline visualization. Black, white, gray with gray-blue accents. Academic style.
+  ```
+
+  ## 范例3：数据分析页
+  ```
+  Professional consulting slide with #F3F4EF background. Title in gray-blue: "传统软件行业面临的根本性威胁" (Fundamental Threats Facing Traditional Software Industry). Three core challenges listed with icons: "1. SaaS按座席收费模式的崩溃" (Collapse of per-seat SaaS pricing), "2. 人工操作岗位的大规模替代" (Mass replacement of manual operation positions), "3. 软件界面的存在必要性质疑" (Questioning necessity of software interfaces). Data support section with bar chart comparing costs: "SDR成本: 3.5万美元/年 → 500美元/年 (AI Agent)" (SDR cost: $35k/year → $500/year), "客服座席成本下降: 90%+" (Customer service seat cost down 90%+). Cost comparison bar chart in gray-blue. Black, white, gray scheme. High-density consulting style.
+  ```
+
+  ## 范例4：流程机制页
+  ```
+  Professional consulting slide with #F3F4EF background. Title in gray-blue: "Agentic Loop：感知-规划-执行-反思" (Agentic Loop: Perception-Planning-Action-Reflection). Central circular flow diagram showing four stages: "1. 感知 (Perception): 接收任务与环境状态" (Receive tasks and environment state), "2. 规划 (Planning): 分解子任务，生成执行计划" (Decompose subtasks, generate execution plan), "3. 执行 (Action): 调用工具/API/计算机操作" (Call tools/API/computer operations), "4. 反思 (Reflection): 评估结果，调整策略" (Evaluate results, adjust strategy). Side panel showing technical details: "记忆管理: 短期(RAM)、长期(向量数据库)" (Memory management: short-term RAM, long-term vector DB). Circular flow diagram with arrows. Gray-blue accents. Academic style.
+  ```
+
+  # Final Reminder
+  **你的输出将直接传给图像生成模型,必须:**
+  1. 用完整自然语言描述,让画图模型能直接理解和渲染
+  2. 每个prompt自包含所有视觉信息(背景色、风格、色彩、布局、内容)
+  3. 中文内容必须附带英文翻译括注
+  4. 数据和内容必须具体——包含实际的数字、名称、描述
+  5. 每页必须包含实质性图表/可视化,不能只有文字
+  6. 严格使用固定开头和结尾公式

@@ -1,0 +1,122 @@
+name: 小学生科普
+display_name: "小学生科普 (Kids Science)"
+description: "面向小学生的科普风格，色彩丰富，插图可爱，语言简单有趣"
+version: "1.0"
+
+content_framework:
+  method: question_answer
+  description: "提问引导式，激发好奇心，逐步揭示答案"
+  policy:
+    structure: "提出趣味问题 → 引导思考 → 图解答案 → 趣味延伸 → 动手试试"
+    language_level: "小学3-6年级阅读水平"
+
+visual:
+  aspect_ratio: "16:9"
+  resolution: "1920x1080"
+  background_color: "#F0F9FF"
+
+  color_scheme:
+    primary:
+      - "#F0F9FF"    # light sky blue background
+      - "#2D3436"    # dark text (minimal use)
+      - "#636E72"    # gray for annotations
+    accent:
+      - "#00B894"    # mint green (nature/science)
+      - "#FDCB6E"    # warm yellow (highlights)
+      - "#6C5CE7"    # purple (mystery/fun)
+      - "#E17055"    # coral (attention/important)
+      - "#74B9FF"    # sky blue (friendly)
+    highlight_fill: "#DFE6E9"
+
+  typography:
+    style: "Rounded, child-friendly, large size, high readability"
+    text_language: "Simplified Chinese, 注音 optional"
+    title_style: "Extra bold rounded, colorful, with fun decorations"
+    body_style: "Large font, short sentences, max 2-3 lines per text block"
+
+  layout:
+    page_density: "Very low, illustration-dominant"
+    structure_preference: "Large central illustrations, text as captions, quiz-style layouts"
+    whitespace_policy: "Very generous, no visual clutter"
+
+master_template:
+  consistency_mode: loose
+  fixed_elements:
+    - "Light sky blue background"
+    - "Friendly mascot character in corner"
+    - "Fun page number with star decoration"
+  variation_rule: "Maximum visual variety, each page is a unique discovery"
+
+structure_rules:
+  cover: required
+  section_divider: none
+  summary: recommended
+  pages_per_chapter: "2-5"
+
+page_types:
+  cover:
+    rules: "Big colorful title, cute mascot, question mark or magnifying glass"
+    density: minimal
+    word_count: "5-20"
+  content:
+    rules: "Large illustration center, simple text around, arrows/labels"
+    density: very_low
+    word_count: "20-80"
+  summary:
+    rules: "Mascot reviewing key points, star-decorated takeaway boxes"
+    density: low
+    word_count: "20-60"
+
+chart_policy:
+  priority:
+    - illustrated_diagrams
+    - simple_icons
+    - step_by_step_sequences
+    - size_comparisons
+  rules: "No complex charts. Use illustrated comparisons, labeled diagrams, and fun infographics"
+
+quality:
+  benchmark: "DK Eyewitness / National Geographic Kids quality"
+  principles:
+    - "Curiosity: every page should make kids want to know more"
+    - "Clarity: a 9-year-old should understand without help"
+    - "Fun: learning should feel like playing"
+    - "Visual: 80% illustration, 20% text"
+
+meta_prompt: |
+  # Role
+  你是儿童科普图书的视觉设计师，用色彩缤纷的插画和简单的语言让小学生爱上学习。
+
+  # Core Principles
+  - **好奇心驱动**: 用问题引导，让孩子想知道答案
+  - **超级简单**: 文字少少的，图画大大的
+  - **色彩缤纷**: 用明亮的颜色吸引注意力
+  - **趣味互动**: 像游戏一样，每页都有惊喜
+
+  # Output Format
+  ```
+  top: "有趣的问题标题?" bold colorful 超大圆体字;
+  center: 大幅可爱插画,[描述核心概念的图解],明亮配色;
+  labels: 简短标注箭头指向关键部分;
+  bottom: "你知道吗?" 趣味小知识框,#FDCB6E背景
+  ```
+
+  # Special Cases
+  ## 封面
+  超大彩色标题 + 可爱吉祥物 + 问号和放大镜装饰
+
+  ## 概念页
+  中央大插画 + 标注箭头 + 简短说明
+
+  ## 实验页
+  步骤1→2→3的图解流程 + 材料清单图标
+
+  ## 总结页
+  吉祥物说"今天学到了!" + 星星装饰的要点框
+
+  # Quality Checklist
+  - [ ] 小学生能看懂吗?
+  - [ ] 插画是否足够大和吸引人?
+  - [ ] 文字是否简短(每块不超过2行)?
+  - [ ] 颜色是否明亮有趣?
+  - [ ] 是否有互动元素(问题/小游戏)?

@@ -1,0 +1,116 @@
+name: 讲座
+display_name: "讲座 (Lecture/Talk)"
+description: "专业讲座/演讲风格，大字标题，视觉冲击力强，每页聚焦一个核心观点"
+version: "1.0"
+
+content_framework:
+  method: narrative
+  description: "叙事递进式，每页一个核心观点，逐步引导听众"
+  narrative_policy:
+    structure: "开场引入 → 核心概念 → 案例展示 → 互动思考 → 总结行动"
+    page_density: "每页只讲一个点，让观众记住"
+
+visual:
+  aspect_ratio: "16:9"
+  resolution: "1920x1080"
+  background_color: "#1A1A2E"
+
+  color_scheme:
+    primary:
+      - "#1A1A2E"    # deep navy background
+      - "#FFFFFF"    # white text
+      - "#E8E8E8"    # light gray secondary
+    accent:
+      - "#E94560"    # vibrant red for emphasis
+      - "#0F3460"    # mid-navy for structure
+      - "#16213E"    # dark card background
+    highlight_fill: "#E94560"
+
+  typography:
+    style: "Bold modern sans-serif, large titles, strong contrast"
+    text_language: "Simplified Chinese, mixed with English keywords"
+    title_style: "Extra bold, centered, white on dark, 超大字号"
+    body_style: "简洁短句，最多3-5个要点"
+
+  layout:
+    page_density: "Low density, one key message per slide"
+    structure_preference: "Full-bleed imagery, centered text, split layouts"
+    whitespace_policy: "Generous whitespace, cinematic feel"
+
+master_template:
+  consistency_mode: moderate
+  fixed_elements:
+    - "Dark navy background #1A1A2E"
+    - "Bottom-right subtle page indicator"
+  variation_rule: "High visual variety allowed, each slide can have unique layout"
+
+structure_rules:
+  cover: required
+  section_divider: none
+  summary: recommended
+  pages_per_chapter: "3-10"
+
+page_types:
+  cover:
+    rules: "Full-screen title, dramatic typography, speaker name subtitle"
+    density: minimal
+    word_count: "10-30"
+  content:
+    rules: "One key idea, large visual or keyword, minimal text"
+    density: low
+    word_count: "30-80"
+  summary:
+    rules: "Key takeaways as numbered large-font items"
+    density: low
+    word_count: "30-100"
+
+chart_policy:
+  priority:
+    - infographics
+    - single_stat_callout
+    - simple_comparison
+    - process_flow
+  rules: "Charts should be simplified and visually striking, not data-heavy"
+
+quality:
+  benchmark: "TED Talk quality slides - visual impact, memorability"
+  principles:
+    - "One message per slide"
+    - "Visual dominance over text"
+    - "High contrast for readability at distance"
+    - "Emotional resonance through imagery"
+
+meta_prompt: |
+  # Role
+  你是顶级演讲视觉设计师，专注于创建具有视觉冲击力的讲座幻灯片。
+
+  # Core Principles
+  - **一页一观点**: 每页只传达一个核心信息
+  - **视觉优先**: 大图、大字、强对比
+  - **故事驱动**: 用视觉叙事引导观众情绪
+  - **简洁有力**: 文字精简到最少，让视觉说话
+
+  # Output Format
+  使用简洁的布局描述:
+
+  ```
+  center: "核心观点大字" white bold 超大;
+  background: 深色渐变/全屏图片;
+  bottom-center: 简短补充说明 #E8E8E8
+  ```
+
+  # Special Cases
+  ## 封面
+  超大标题居中，演讲者信息小字底部
+
+  ## 数据页
+  一个核心数字超大展示 + 一句解释
+
+  ## 对比页
+  左右分屏，强烈视觉对比
+
+  # Quality Checklist
+  - [ ] 每页是否只有一个核心信息?
+  - [ ] 文字是否足够大，后排观众能看清?
+  - [ ] 视觉元素是否有冲击力?
+  - [ ] 是否避免了密集的数据表格?

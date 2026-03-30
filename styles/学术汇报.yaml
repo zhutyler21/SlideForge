@@ -1,0 +1,110 @@
+name: 学术汇报
+display_name: "学术汇报 (Academic Presentation)"
+description: "学术会议/论文答辩风格，严谨、数据密集、引用规范"
+version: "1.0"
+
+content_framework:
+  method: IMRaD
+  description: "Introduction-Methods-Results-and-Discussion 学术论文结构"
+  policy:
+    structure: "研究背景 → 方法论 → 实验结果 → 讨论与结论"
+    citation_style: "页内标注引用来源"
+
+visual:
+  aspect_ratio: "4:3"
+  resolution: "2048x1536"
+  background_color: "#FFFFFF"
+
+  color_scheme:
+    primary:
+      - "#FFFFFF"    # white background
+      - "#2C3E50"    # dark blue-gray text
+      - "#7F8C8D"    # medium gray
+      - "#BDC3C7"    # light gray
+    accent:
+      - "#2980B9"    # academic blue
+      - "#E74C3C"    # red for emphasis/alerts
+      - "#27AE60"    # green for positive results
+    highlight_fill: "#EBF5FB"
+
+  typography:
+    style: "Times New Roman / serif for formulas, sans-serif for body"
+    text_language: "Simplified Chinese body, English for technical terms and formulas"
+    title_style: "Bold, left-aligned, dark blue-gray #2C3E50"
+    body_style: "Structured, numbered, with inline citations"
+
+  layout:
+    page_density: "Medium-high, data-rich but organized"
+    structure_preference: "Two-column layouts, figure+caption, table+analysis"
+    whitespace_policy: "Moderate whitespace, academic readability"
+
+master_template:
+  consistency_mode: strict
+  fixed_elements:
+    - "White background"
+    - "Top-left institution logo area"
+    - "Bottom slide number and conference name"
+    - "Thin blue top line"
+  variation_rule: "Body area varies, header/footer consistent"
+
+structure_rules:
+  cover: required
+  section_divider: optional
+  summary: required
+  pages_per_chapter: "2-6"
+
+page_types:
+  cover:
+    rules: "Paper title, authors, affiliation, conference name, date"
+    density: low
+    word_count: "30-60"
+  content:
+    rules: "Figures, tables, equations, structured bullet points"
+    density: high
+    word_count: "150-500"
+  summary:
+    rules: "Key findings, future work, acknowledgments"
+    density: medium
+    word_count: "100-250"
+
+chart_policy:
+  priority:
+    - line_charts
+    - bar_charts
+    - scatter_plots
+    - tables
+    - architecture_diagrams
+    - confusion_matrices
+  rules: "All charts must have axis labels, legends, units, and source citations"
+
+quality:
+  benchmark: "Top-tier academic conference presentation quality"
+  principles:
+    - "Data accuracy: every number must be clearly sourced"
+    - "Reproducibility: methods must be clearly described"
+    - "Visual clarity: charts readable without narration"
+    - "Citation discipline: reference key prior work"
+
+meta_prompt: |
+  # Role
+  你是学术会议论文展示的视觉设计专家,将研究内容转换为严谨、清晰的学术幻灯片。
+
+  # Core Principles
+  - **数据为王**: 用图表展示实验结果，不用文字堆砌
+  - **严谨规范**: 轴标签、图例、单位、引用一个不能少
+  - **逻辑清晰**: 从研究问题到结论的推理链要明确
+  - **学术美感**: 专业而不花哨，严肃而不沉闷
+
+  # Output Format
+  ```
+  upper-left: "论文标题/章节" bold #2C3E50;
+  middle-left: [图表类型],[详细数据描述],#2980B9标注关键发现;
+  middle-right: [补充图表/表格];
+  lower: 引用来源 #7F8C8D italic
+  ```
+
+  # Quality Checklist
+  - [ ] 图表是否有完整的轴标签和图例?
+  - [ ] 数据来源是否标注?
+  - [ ] 是否避免了主观性修饰词?
+  - [ ] 方法描述是否足够清晰?

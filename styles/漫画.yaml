@@ -1,0 +1,115 @@
+name: 漫画
+display_name: "漫画风格 (Comic Style)"
+description: "活泼有趣的漫画插画风格，适合创意展示和轻松话题"
+version: "1.0"
+
+content_framework:
+  method: narrative
+  description: "故事叙事型，用角色和场景推动信息传递"
+  policy:
+    structure: "设定场景 → 引出问题 → 角色互动 → 揭示答案 → 趣味总结"
+
+visual:
+  aspect_ratio: "16:9"
+  resolution: "1920x1080"
+  background_color: "#FFF8E7"
+
+  color_scheme:
+    primary:
+      - "#FFF8E7"    # warm cream background
+      - "#2D3436"    # dark text
+      - "#636E72"    # medium gray
+    accent:
+      - "#FF6B6B"    # coral red
+      - "#4ECDC4"    # teal
+      - "#FFE66D"    # sunny yellow
+      - "#A29BFE"    # lavender purple
+    highlight_fill: "#FFEAA7"
+
+  typography:
+    style: "Rounded, playful font style, comic-book feel"
+    text_language: "Simplified Chinese, casual tone"
+    title_style: "Bold rounded, large, with comic-style emphasis (exclamation marks!)"
+    body_style: "Short speech-bubble-style text, conversational"
+
+  layout:
+    page_density: "Low-medium, illustration-dominant"
+    structure_preference: "Comic panels, speech bubbles, character illustrations"
+    whitespace_policy: "Generous, playful, asymmetric"
+
+master_template:
+  consistency_mode: loose
+  fixed_elements:
+    - "Warm cream background #FFF8E7"
+    - "Consistent character style throughout"
+  variation_rule: "High layout variety, each page is a unique comic panel arrangement"
+
+structure_rules:
+  cover: required
+  section_divider: none
+  summary: optional
+  pages_per_chapter: "2-6"
+
+page_types:
+  cover:
+    rules: "Title as comic header, main character introduction, vibrant"
+    density: minimal
+    word_count: "10-30"
+  content:
+    rules: "Comic panels with characters explaining concepts, speech bubbles"
+    density: low
+    word_count: "30-100"
+  summary:
+    rules: "Characters summarizing key points in speech bubbles"
+    density: low
+    word_count: "20-60"
+
+chart_policy:
+  priority:
+    - infographics
+    - illustrated_diagrams
+    - simple_flowcharts
+    - icon_grids
+  rules: "Replace formal charts with illustrated infographics and character explanations"
+
+quality:
+  benchmark: "Educational manga / webtoon quality"
+  principles:
+    - "Fun and engaging visual storytelling"
+    - "Characters make abstract concepts relatable"
+    - "Bright colors maintain energy and attention"
+    - "Humor and warmth in visual communication"
+
+meta_prompt: |
+  # Role
+  你是漫画风格的PPT视觉设计师，用有趣的插画和角色把信息变得生动易懂。
+
+  # Core Principles
+  - **角色驱动**: 用可爱的角色来解释概念
+  - **视觉叙事**: 像漫画分镜一样组织信息
+  - **趣味优先**: 让每一页都让人想看下去
+  - **简单易懂**: 复杂概念用简单的视觉隐喻
+
+  # Output Format
+  ```
+  panel-top: 场景设定,角色出现,[角色描述];
+  speech-bubble: "核心对话/观点" #2D3436;
+  panel-bottom: 概念图解,[用插画形式展示],#4ECDC4和#FF6B6B配色;
+  accent: 趣味装饰元素,星星/爆炸效果/表情符号
+  ```
+
+  # Special Cases
+  ## 封面
+  主角色大图 + 漫画标题字体 + 活泼装饰
+
+  ## 概念解释
+  角色用对话框解释 + 旁边配图解
+
+  ## 总结
+  角色竖起大拇指 + 要点气泡框
+
+  # Quality Checklist
+  - [ ] 是否有一致的角色风格?
+  - [ ] 信息是否通过视觉而非文字传达?
+  - [ ] 色彩是否活泼有趣?
+  - [ ] 复杂概念是否用简单隐喻?
