@@ -229,3 +229,20 @@ projects/             项目数据
 ```
 
 </details>
+
+---
+
+## 联系作者
+
+**GitHub**: [zhutyler21](https://github.com/zhutyler21)
+
+欢迎扫码加微信好友交流，或打赏支持项目开发。也非常欢迎提 PR！
+
+<p align="center">
+  <img src="assets/wechat_friend.jpg" width="280" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="assets/wechat_pay.jpg" width="280" />
+</p>
+<p align="center">
+  <b>加好友</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>打赏</b>
+</p>
