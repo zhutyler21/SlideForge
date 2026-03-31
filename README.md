@@ -122,9 +122,15 @@ uv run scripts/run.py
 >    IMAGE_GEN_MODEL=gemini-3.1-flash-image-preview
 >    VISION_MODEL=gemini-3.1-flash-lite-preview
 >    ```
-> 5. 启动：`uv run scripts/run.py`
+> 5. 安装完成后，帮我打开一个终端窗口，定位到项目目录。**不要代我执行启动命令。**
 >
 > 注意：需要 Python 3.10+ 和 [uv](https://docs.astral.sh/uv/)。如果没有 uv，先运行 `curl -LsSf https://astral.sh/uv/install.sh | sh`。
+
+安装完成后，在终端中自己运行启动命令：
+
+```bash
+uv run scripts/run.py
+```
 
 ---
 
