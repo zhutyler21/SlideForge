@@ -110,7 +110,7 @@ uv run scripts/run.py
 
 > 请帮我安装 SlideForge 项目。步骤如下：
 >
-> 1. 克隆仓库：`git clone https://github.com/zhutyler21/PPT-Slide-Generator.git && cd PPT-Slide-Generator`
+> 1. 克隆仓库：`git clone https://github.com/zhutyler21/SlideForge.git && cd PPT-Slide-Generator`
 > 2. 安装依赖：`uv pip install -r requirements.txt`
 > 3. 创建配置文件：`cp .env.example .env`
 > 4. 编辑 `.env`，填入以下内容（请替换为你的实际密钥和 API 地址）：
