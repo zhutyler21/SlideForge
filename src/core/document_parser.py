@@ -1,4 +1,4 @@
-"""文档解析器 - 支持 PDF/Word/Markdown/纯文本"""
+"""文档解析器 - 支持 Word/Markdown/纯文本（PDF 待开发）"""
 
 from __future__ import annotations
 
@@ -7,6 +7,14 @@ from pathlib import Path
 
 def _reject_doc(path: Path) -> str:
     raise ValueError("不支持旧版 .doc 格式，请先转换为 .docx")
+
+
+def _reject_pdf(path: Path) -> str:
+    raise ValueError("PDF 解析功能正在开发中，请先将 PDF 转换为 Word(.docx) 或 Markdown(.md) 格式")
+
+
+# 待开发：图片格式支持
+_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".bmp", ".gif", ".tiff"}
 
 
 def parse_document(file_path: str | Path) -> str:
@@ -28,8 +36,15 @@ def parse_document(file_path: str | Path) -> str:
         raise FileNotFoundError(f"文件不存在: {path}")
 
     suffix = path.suffix.lower()
+
+    if suffix in _IMAGE_EXTENSIONS:
+        raise ValueError(
+            f"图片格式 ({suffix}) 作为输入文档的功能正在开发中。\n"
+            "目前图片仅支持作为「参考图片」用于风格迁移。"
+        )
+
     parsers = {
-        ".pdf": _parse_pdf,
+        ".pdf": _reject_pdf,
         ".docx": _parse_docx,
         ".doc": _reject_doc,
         ".md": _parse_text,
@@ -50,21 +65,6 @@ def parse_document(file_path: str | Path) -> str:
         raise ValueError(f"文档内容为空: {path}")
 
     return text
-
-
-def _parse_pdf(path: Path) -> str:
-    """使用 PyMuPDF 解析 PDF"""
-    import fitz
-
-    doc = fitz.open(str(path))
-    pages = []
-    for i, page in enumerate(doc):
-        text = page.get_text()
-        if text.strip():
-            pages.append(f"--- Page {i + 1} ---\n{text.strip()}")
-    doc.close()
-
-    return "\n\n".join(pages)
 
 
 def _parse_docx(path: Path) -> str:

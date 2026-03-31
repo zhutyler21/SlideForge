@@ -29,7 +29,7 @@ def create_project_wizard():
 
     # 2. 参考文档路径
     source_path = prompt_text(
-        "参考文档路径 (支持 PDF/Word/Markdown/txt)",
+        "参考文档路径 (支持 Word/Markdown/txt，PDF 待开发)",
         validator=_validate_file_exists,
     )
 

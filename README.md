@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  PDF / Word / Markdown → AI 全自动 → 一整套专业 PNG 幻灯片
+  Word / Markdown / txt → AI 全自动 → 一整套专业 PNG 幻灯片
 </p>
 
 ---
@@ -141,6 +141,8 @@ projects/我的项目/
 ## FAQ
 
 **能编辑生成的幻灯片吗？** — 是 PNG 图片。可以拖进 PPT / Keynote 当背景，再叠加可编辑内容。
+
+**支持 PDF 输入吗？** — PDF 和图片作为输入文档的功能正在开发中。目前请先将 PDF 转为 Word(.docx) 或 Markdown(.md) 使用。
 
 **支持英文吗？** — 支持中文、英文、混合。
 
