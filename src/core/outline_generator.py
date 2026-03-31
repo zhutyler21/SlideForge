@@ -48,7 +48,7 @@ def generate_chapter_framework(
         client,
         model=model,
         temperature=0.4,
-        max_tokens=4096,
+        max_tokens=16384,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
@@ -56,7 +56,8 @@ def generate_chapter_framework(
     )
 
     content = response.choices[0].message.content
-    return _parse_framework_response(content)
+    truncated = response.choices[0].finish_reason == "length"
+    return _parse_framework_response(content, truncated=truncated)
 
 
 def regenerate_chapter_framework(
@@ -79,7 +80,7 @@ def regenerate_chapter_framework(
         client,
         model=model,
         temperature=0.4,
-        max_tokens=4096,
+        max_tokens=16384,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
@@ -87,7 +88,8 @@ def regenerate_chapter_framework(
     )
 
     content = response.choices[0].message.content
-    return _parse_framework_response(content)
+    truncated = response.choices[0].finish_reason == "length"
+    return _parse_framework_response(content, truncated=truncated)
 
 
 def expand_page_details(
@@ -420,7 +422,45 @@ def _build_expand_user_prompt(
     return prompt
 
 
-def _parse_framework_response(content: str) -> dict[str, Any]:
+def _repair_json(text: str) -> str:
+    """尝试修复常见的 JSON 格式问题"""
+    # 移除行尾注释 (// ...)
+    text = re.sub(r'//[^\n]*', '', text)
+    # 移除尾部多余逗号: ,] 或 ,}
+    text = re.sub(r',\s*([}\]])', r'\1', text)
+    # 修复缺少逗号的情况：}" 或 ]" 或 数字/true/false/null 后跟 "
+    # 行尾是 } ] " 数字 true false null，下一个非空字符是 " 或 { 或 [
+    text = re.sub(r'(["\d}\]eul])\s*\n(\s*["{[\[])', r'\1,\n\2', text)
+    return text
+
+
+def _try_parse_json(text: str) -> dict[str, Any] | None:
+    """尝试解析 JSON，失败则尝试修复后再解析"""
+    for candidate in (text, _repair_json(text)):
+        try:
+            return json.loads(candidate)
+        except (json.JSONDecodeError, ValueError):
+            continue
+    return None
+
+
+def _try_close_truncated_json(text: str) -> str:
+    """尝试闭合被截断的 JSON：补齐缺失的括号"""
+    # 去掉最后一个不完整的值（可能是截断的字符串）
+    # 先尝试去掉最后一个未闭合的字符串
+    text = re.sub(r',?\s*"[^"]*$', '', text)
+    # 统计未闭合的括号
+    open_braces = text.count('{') - text.count('}')
+    open_brackets = text.count('[') - text.count(']')
+    # 去掉尾部悬挂的逗号
+    text = re.sub(r',\s*$', '', text.rstrip())
+    # 按嵌套顺序闭合
+    text += ']' * max(0, open_brackets)
+    text += '}' * max(0, open_braces)
+    return text
+
+
+def _parse_framework_response(content: str, truncated: bool = False) -> dict[str, Any]:
     """解析 LLM 返回的框架 JSON"""
     text = content.strip()
 
@@ -436,22 +476,26 @@ def _parse_framework_response(content: str) -> dict[str, Any]:
         if text.startswith("json"):
             text = text[4:].strip()
 
-    try:
-        result = json.loads(text)
-    except json.JSONDecodeError:
-        # 尝试在文本中找到 JSON 对象：先贪婪（最外层），再非贪婪（内层）
+    candidates = [text]
+    if truncated:
+        candidates.append(_try_close_truncated_json(text))
+
+    result = None
+    for candidate in candidates:
+        result = _try_parse_json(candidate)
+        if result is not None:
+            break
+
+    if result is None:
+        # 尝试在文本中找到 JSON 对象
         json_match = re.search(r'\{[\s\S]*\}', text)
         if json_match:
-            try:
-                result = json.loads(json_match.group())
-            except json.JSONDecodeError:
-                # 贪婪匹配可能包含尾部垃圾，回退到非贪婪
-                json_match = re.search(r'\{[\s\S]*?\}', text)
-                if json_match:
-                    result = json.loads(json_match.group())
-                else:
-                    raise ValueError(f"无法解析 AI 返回的框架 JSON:\n{text[:500]}")
-        else:
+            result = _try_parse_json(json_match.group())
+        if result is None and truncated:
+            json_match = re.search(r'\{[\s\S]*', text)
+            if json_match:
+                result = _try_parse_json(_try_close_truncated_json(json_match.group()))
+        if result is None:
             raise ValueError(f"无法解析 AI 返回的框架 JSON:\n{text[:500]}")
 
     # 验证基本结构
