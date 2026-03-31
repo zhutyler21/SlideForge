@@ -4,12 +4,6 @@
   <b>丢进文档，出来幻灯片</b><br>
   Word / Markdown / txt → AI 全自动 → 一整套专业幻灯片
 </p>
-
-<p align="center">
-  <img src="assets/examples/example_01_cover_dark.png" width="48%" />
-  <img src="assets/examples/example_03_cover_purple.png" width="48%" />
-</p>
-
 ---
 
 ## 效果展示
@@ -21,7 +15,7 @@
   <img src="assets/examples/example_04_diagram_purple.png" width="48%" />
 </p>
 <p align="center">
-  <img src="assets/examples/example_05_cover_light.png" width="48%" />
+  <img src="assets/examples/example_01_cover_dark.png" width="48%" />
   <img src="assets/examples/example_06_chart_light.png" width="48%" />
 </p>
 
