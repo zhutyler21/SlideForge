@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 from typing import Any
 
 from openai import OpenAI
@@ -141,8 +142,7 @@ def _override_aspect_ratio(
     aspect_ratio: str,
     resolution: str,
 ) -> dict[str, Any]:
-    """用用户选择的画幅覆盖 style_config（浅拷贝，不修改原始配置）"""
-    import copy
+    """用用户选择的画幅覆盖 style_config（深拷贝，不修改原始配置）"""
     cfg = copy.deepcopy(style_config)
     visual = cfg.setdefault("visual", {})
     visual["aspect_ratio"] = aspect_ratio
@@ -183,8 +183,6 @@ def _generate_single_prompt(
     """为单页生成 slide_prompt（动态适配所有风格）"""
     content = page_info['content_detail'] or page_info['content_brief']
     page_type = page_info['page_type']
-    bg_color = _get_bg_color(style_context)
-
     user_prompt = (
         "Generate one self-contained image-generation prompt for this slide.\n\n"
         "**Output format**: A single continuous paragraph in natural language English, "
@@ -312,6 +310,7 @@ def _generate_single_prompt(
         client,
         model=model,
         temperature=0.3,
+        max_tokens=1024,
         messages=[
             {"role": "system", "content": meta_prompt},
             {"role": "user", "content": user_prompt},
@@ -323,16 +322,6 @@ def _generate_single_prompt(
     if not result:
         raise ValueError(f"第 {page_info['page']} 页返回空 slide_prompt")
     return result
-
-
-def _get_bg_color(style_context: str) -> str:
-    """从 style_context 中提取背景色"""
-    for line in style_context.split("\n"):
-        if line.startswith("background_color:"):
-            color = line.split(":", 1)[1].strip()
-            if color:
-                return color
-    return "#F3F4EF"
 
 
 def _extract_text(content) -> str:

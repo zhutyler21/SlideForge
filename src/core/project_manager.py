@@ -146,7 +146,8 @@ def list_projects() -> list[dict[str, Any]]:
                 "images_count": images_count,
                 "path": str(project_dir),
             })
-        except Exception:
+        except Exception as e:
+            print(f"  警告: 加载项目失败 {json_path}: {e}")
             continue
 
     return projects
@@ -192,7 +193,8 @@ def replace_source_document(project_name: str, new_doc_path: str | Path) -> str:
 
     # 清空旧文档
     for old_file in source_dir.iterdir():
-        old_file.unlink()
+        if old_file.is_file():
+            old_file.unlink()
 
     # 复制新文档
     dest = source_dir / new_path.name
@@ -257,7 +259,8 @@ def replace_reference_images(project_name: str, input_str: str) -> int:
 
     # 清空旧图片
     for old_file in ref_dir.iterdir():
-        old_file.unlink()
+        if old_file.is_file():
+            old_file.unlink()
 
     # 复制新图片
     count = 0

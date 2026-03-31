@@ -355,9 +355,8 @@ def _validate_dir_exists(path: str) -> None:
 
 
 def _validate_page_count(value: str) -> None:
-    try:
-        n = int(value)
-        if n < 1 or n > 200:
-            raise ValueError("页数应在 1-200 之间")
-    except (TypeError, ValueError):
+    if not value.strip().isdigit():
         raise ValueError("请输入有效的数字")
+    n = int(value)
+    if n < 1 or n > 200:
+        raise ValueError("页数应在 1-200 之间")

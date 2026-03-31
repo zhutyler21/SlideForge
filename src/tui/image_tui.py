@@ -58,7 +58,11 @@ def run_image_tui(project_name: str):
 
     # 3. 并发设置
     workers_str = prompt_text("并发线程数", default="4")
-    workers = max(1, int(workers_str))
+    try:
+        workers = min(16, max(1, int(workers_str)))
+    except ValueError:
+        print("  输入无效，使用默认值 4")
+        workers = 4
 
     # 4. 执行
     print("\n--- 生成图片 ---")

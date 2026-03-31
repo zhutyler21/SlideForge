@@ -55,14 +55,12 @@ def run_pdf_tui(project_name: str):
 
     # 4. 执行导出
     print("\n--- 导出 PDF ---")
-    aspect_ratio = proj.get("aspect_ratio", "16:9")
 
     try:
         result_path = export_images_to_pdf(
             output_dir=output_dir,
             pdf_path=pdf_path,
             pages=pages,
-            aspect_ratio=aspect_ratio,
         )
         count = len(generated_slides) if pages is None else len(pages)
         print(f"\nPDF 导出成功! 共 {count} 页")

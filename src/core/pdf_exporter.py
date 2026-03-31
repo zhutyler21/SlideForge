@@ -11,7 +11,6 @@ def export_images_to_pdf(
     output_dir: str | Path,
     pdf_path: str | Path,
     pages: set[int] | None = None,
-    aspect_ratio: str = "16:9",
 ) -> Path:
     """
     将 output 目录中的 page_XX.png 图片按页码顺序合并为 PDF
@@ -20,7 +19,6 @@ def export_images_to_pdf(
         output_dir: 图片所在目录
         pdf_path: 输出 PDF 文件路径
         pages: 要包含的页码集合（None=全部）
-        aspect_ratio: 画幅比例，用于设置 PDF 页面尺寸
 
     Returns:
         生成的 PDF 路径

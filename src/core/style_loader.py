@@ -29,7 +29,8 @@ def list_styles() -> list[dict[str, str]]:
                 "display_name": config.get("display_name", yaml_file.stem),
                 "description": config.get("description", ""),
             })
-        except Exception:
+        except Exception as e:
+            print(f"  警告: 加载风格文件失败 {yaml_file}: {e}")
             continue
     return styles
 

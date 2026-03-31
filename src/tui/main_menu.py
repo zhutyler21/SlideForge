@@ -12,7 +12,7 @@ def main_menu():
     """主菜单入口"""
     print()
     print("=" * 50)
-    print("  PPT Slide Generator v2.0")
+    print("  PPT Slide Generator v2.0.0")
     print("=" * 50)
     print()
 

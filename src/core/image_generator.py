@@ -9,7 +9,12 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
 
+import ipaddress
+import socket
+from urllib.parse import urlparse
+
 import requests
+import openai
 from openai import OpenAI
 from tqdm import tqdm
 
@@ -50,10 +55,15 @@ def generate_images(
     if pages:
         slides = [s for s in slides if s["page"] in pages]
 
-    # 过滤需要生成的
+    # 过滤需要生成的（去重 page_num）
     tasks = []
+    seen_pages: set[int] = set()
     for slide in slides:
         page_num = slide["page"]
+        if page_num in seen_pages:
+            continue
+        seen_pages.add(page_num)
+
         slide_prompt = slide.get("slide_prompt", "").strip()
         if not slide_prompt:
             continue
@@ -167,6 +177,9 @@ def _generate_single_image(
             tqdm.write(f"  p{page_num}: 已保存")
             return True
 
+        except (openai.AuthenticationError, openai.BadRequestError, openai.PermissionDeniedError) as e:
+            tqdm.write(f"  p{page_num}: 不可恢复错误 - {str(e)[:80]}")
+            return False
         except Exception as e:
             if attempt < max_retries - 1:
                 wait = 2 ** attempt
@@ -256,6 +269,27 @@ def _extract_image_from_message(message: Any) -> bytes | None:
     return None
 
 
+def _resolve_safe_url(url: str) -> str | None:
+    """
+    检查 URL 是否安全（非内网地址），防止 SSRF 攻击。
+    返回解析后的安全 IP 地址，供后续请求直接使用；不安全则返回 None。
+    """
+    try:
+        parsed = urlparse(url)
+        hostname = parsed.hostname or ""
+        addr = socket.getaddrinfo(hostname, None, socket.AF_UNSPEC, socket.SOCK_STREAM)
+        for family, _, _, _, sockaddr in addr:
+            ip = ipaddress.ip_address(sockaddr[0])
+            if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved:
+                tqdm.write(f"  [安全] 拒绝访问内网地址: {hostname} -> {ip}")
+                return None
+        # 返回第一个安全的 IP
+        return addr[0][4][0] if addr else None
+    except (socket.gaierror, ValueError, OSError) as e:
+        tqdm.write(f"  [安全] DNS 解析失败: {hostname} - {e}")
+        return None
+
+
 def _decode_data_uri_or_url(url: str) -> bytes | None:
     """解析 data URI 或 HTTP URL，返回图片字节"""
     if not url:
@@ -264,9 +298,22 @@ def _decode_data_uri_or_url(url: str) -> bytes | None:
     m = re.match(r'data:image/[^;]+;base64,(.+)', url, re.DOTALL)
     if m:
         return base64.b64decode(m.group(1))
-    # HTTP(S) URL
+    # HTTP(S) URL — 解析 IP 后直连，防止 DNS 重绑定
     if url.startswith("http"):
-        resp = requests.get(url, timeout=30)
+        parsed = urlparse(url)
+        resolved_ip = _resolve_safe_url(url)
+        if not resolved_ip:
+            return None
+        # 用解析后的 IP 替换 hostname，设置 Host header 防止 DNS 重绑定
+        port = parsed.port or (443 if parsed.scheme == "https" else 80)
+        ip_url = f"{parsed.scheme}://{resolved_ip}:{port}{parsed.path}"
+        if parsed.query:
+            ip_url += f"?{parsed.query}"
+        resp = requests.get(
+            ip_url, timeout=30,
+            headers={"Host": parsed.hostname},
+            verify=parsed.scheme == "https",
+        )
         resp.raise_for_status()
         return resp.content
     return None
@@ -292,7 +339,20 @@ def _extract_image_from_text(text: str) -> bytes | None:
         url_match = re.search(r'(https?://[^\s]+\.(?:png|jpg|jpeg|webp))', text)
 
     if url_match:
-        resp = requests.get(url_match.group(1), timeout=30)
+        img_url = url_match.group(1)
+        parsed = urlparse(img_url)
+        resolved_ip = _resolve_safe_url(img_url)
+        if not resolved_ip:
+            return None
+        port = parsed.port or (443 if parsed.scheme == "https" else 80)
+        ip_url = f"{parsed.scheme}://{resolved_ip}:{port}{parsed.path}"
+        if parsed.query:
+            ip_url += f"?{parsed.query}"
+        resp = requests.get(
+            ip_url, timeout=30,
+            headers={"Host": parsed.hostname},
+            verify=parsed.scheme == "https",
+        )
         resp.raise_for_status()
         return resp.content
 

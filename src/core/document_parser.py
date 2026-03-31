@@ -5,6 +5,10 @@ from __future__ import annotations
 from pathlib import Path
 
 
+def _reject_doc(path: Path) -> str:
+    raise ValueError("不支持旧版 .doc 格式，请先转换为 .docx")
+
+
 def parse_document(file_path: str | Path) -> str:
     """
     自动识别文件类型并解析为纯文本
@@ -27,7 +31,7 @@ def parse_document(file_path: str | Path) -> str:
     parsers = {
         ".pdf": _parse_pdf,
         ".docx": _parse_docx,
-        ".doc": _parse_docx,
+        ".doc": _reject_doc,
         ".md": _parse_text,
         ".markdown": _parse_text,
         ".txt": _parse_text,

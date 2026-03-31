@@ -7,7 +7,7 @@ import time
 from typing import Any
 
 from dotenv import load_dotenv
-from openai import OpenAI
+from openai import APIConnectionError, APITimeoutError, InternalServerError, OpenAI, RateLimitError
 
 load_dotenv()
 
@@ -67,10 +67,11 @@ def chat_with_retry(
     Returns:
         API 响应对象
     """
+    retryable_errors = (APIConnectionError, APITimeoutError, RateLimitError, InternalServerError)
     for attempt in range(max_retries):
         try:
             return client.chat.completions.create(**kwargs)
-        except Exception as e:
+        except retryable_errors as e:
             if attempt < max_retries - 1:
                 wait = 2 ** attempt
                 print(f"  API 调用失败 ({attempt + 1}/{max_retries}): {str(e)[:80]}，{wait}s 后重试")

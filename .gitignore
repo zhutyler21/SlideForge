@@ -36,3 +36,5 @@ temp/
 # Legacy generated images (if any remain in root)
 generated_images/
 generated_images_*/
+
+docs/

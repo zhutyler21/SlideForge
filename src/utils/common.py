@@ -47,6 +47,10 @@ def parse_page_range(range_str: str) -> list[int]:
         else:
             pages.append(int(part))
 
+    # 过滤无效页码（负数和0）
+    pages = [p for p in pages if p > 0]
+    if not pages:
+        raise ValueError("没有有效的页码")
     return sorted(set(pages))
 
 

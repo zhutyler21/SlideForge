@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from typing import Any
 
 from openai import OpenAI
@@ -47,6 +48,7 @@ def generate_chapter_framework(
         client,
         model=model,
         temperature=0.4,
+        max_tokens=4096,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
@@ -77,6 +79,7 @@ def regenerate_chapter_framework(
         client,
         model=model,
         temperature=0.4,
+        max_tokens=4096,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
@@ -142,6 +145,7 @@ def expand_page_details(
                 client,
                 model=model,
                 temperature=0.3,
+                max_tokens=2048,
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt},
@@ -435,11 +439,18 @@ def _parse_framework_response(content: str) -> dict[str, Any]:
     try:
         result = json.loads(text)
     except json.JSONDecodeError:
-        # 尝试在文本中找到 JSON 对象
-        import re
+        # 尝试在文本中找到 JSON 对象：先贪婪（最外层），再非贪婪（内层）
         json_match = re.search(r'\{[\s\S]*\}', text)
         if json_match:
-            result = json.loads(json_match.group())
+            try:
+                result = json.loads(json_match.group())
+            except json.JSONDecodeError:
+                # 贪婪匹配可能包含尾部垃圾，回退到非贪婪
+                json_match = re.search(r'\{[\s\S]*?\}', text)
+                if json_match:
+                    result = json.loads(json_match.group())
+                else:
+                    raise ValueError(f"无法解析 AI 返回的框架 JSON:\n{text[:500]}")
         else:
             raise ValueError(f"无法解析 AI 返回的框架 JSON:\n{text[:500]}")
 
