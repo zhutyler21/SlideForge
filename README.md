@@ -18,8 +18,12 @@
   <img src="assets/examples/example_01_cover_dark.png" width="48%" />
   <img src="assets/examples/example_06_chart_light.png" width="48%" />
 </p>
+<p align="center">
+  <img src="assets/examples/example_07_cover_colorful.png" width="48%" />
+  <img src="assets/examples/example_08_chart_minimal.png" width="48%" />
+</p>
 
-> 深色讲座风、紫色渐变风、浅色咨询报告风……同一份文档，换个风格就是完全不同的视觉体验。图表、流程图、数据对比——AI 会根据内容自动选择最合适的可视化方式。
+> 深色讲座风、紫色渐变风、浅色咨询报告风、彩色几何风、极简学术风……同一份文档，换个风格就是完全不同的视觉体验。图表、流程图、数据对比——AI 会根据内容自动选择最合适的可视化方式。
 
 ---
 
